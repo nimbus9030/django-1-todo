@@ -1,0 +1,11 @@
+<h1>Hello TODO</h1>
+
+<form action="{% url 'add' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" name="submit" class="btn btn-outline-primary">
+        追加
+    </button>
+
+</form>
