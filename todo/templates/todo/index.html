@@ -1,11 +1,79 @@
-<h1>Hello TODO</h1>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<form action="{% url 'add' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
 
-    <button type="submit" name="submit" class="btn btn-outline-primary">
-        追加
-    </button>
+    <title>Todo list</title>
 
-</form>
+  </head>
+  <body>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> <script src="https://kit.fontawesome.com/15974f9624.js" crossorigin="anonymous"></script>
+
+    <div class="container">
+
+        <!-- title row -->
+        <div class="row">
+          <div class="offset-md-2 col-lg-9">
+            <div class="page-header">
+              <h1>
+                Todo List
+              </h1>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Add a todo row -->
+        <div class="row">
+          <div class="offset-md-2 col-lg-9">
+            <form method="post" action="{% url 'add' %}">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="col-md-6">
+                  <input type="text" class="form-control" name="title" placeholder="入力してください。" required>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit" name="submit" class="btn btn-outline-primary">
+                    追加
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <hr />
+      
+
+          <!-- todo list row -->
+        <div class="row">
+            <div class="offset-md-2 col-lg-6">
+            <div class="list-group">
+                {% for todo in list %}
+                <div class="list-group-item {% if todo.isCompleted %} todo-complete {% endif %}">
+                <form style="display: inline;" method="post" action="{% url 'update' todo.id %}">
+                    {% csrf_token %}
+                    <input type="checkbox" name="isCompleted" onchange="this.form.submit()" {% if todo.isCompleted %} checked
+                    {% endif %} class="todo-status-checkbox"
+                    title="{% if not todo.isCompleted %} mark as done {% else %} mark undone {% endif %}">
+                </form>
+                {{ todo.title }}
+                <a href="{% url 'delete' todo.id %}" title="Delete">
+                    <i class="far fa-trash-alt"></i>
+                </a>
+                </div>
+                {% endfor %}
+            </div>
+            </div>
+        </div>
+        </div>
+
+
+  </body>
+</html>
